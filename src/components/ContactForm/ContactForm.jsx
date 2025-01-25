@@ -1,10 +1,8 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { addContact } from '../../redux/contactsSlice';
 import { useDispatch } from 'react-redux';
-import { useId } from 'react';
-import { nanoid } from 'nanoid';
 import { BsPhone, BsPerson, BsPersonAdd } from 'react-icons/bs';
+import { addContact } from '../../redux/contactsOps';
 import css from './ContactForm.module.css';
 
 const initialValues = {
@@ -26,16 +24,8 @@ const validationSchema = Yup.object().shape({
 const ContactForm = () => {
   const dispatch = useDispatch();
 
-  const usernameId = useId();
-  const numberId = useId();
-
   const handleSubmit = (values, { resetForm }) => {
-    const newContact = {
-      id: nanoid(),
-      name: values.name,
-      number: values.number,
-    };
-    dispatch(addContact(newContact));
+    dispatch(addContact(values));
     resetForm();
   };
 
@@ -46,7 +36,7 @@ const ContactForm = () => {
       validationSchema={validationSchema}
     >
       <Form autoComplete="off" className={css.contactFormWrap}>
-        <label className={css.contactFormLabel} htmlFor={usernameId}>
+        <label className={css.contactFormLabel} htmlFor="name">
           Name
         </label>
         <div className={css.contactFormInputWrap}>
@@ -54,7 +44,7 @@ const ContactForm = () => {
             className={css.contactFormInput}
             type="text"
             name="name"
-            id={usernameId}
+            id="name"
           />
           <BsPerson className={css.contactFormIcon} size="20" />
         </div>
@@ -64,7 +54,7 @@ const ContactForm = () => {
           className={css.contactFormError}
         />
 
-        <label className={css.contactFormLabel} htmlFor={numberId}>
+        <label className={css.contactFormLabel} htmlFor="number">
           Number
         </label>
         <div className={css.contactFormInputWrap}>
@@ -72,7 +62,7 @@ const ContactForm = () => {
             className={css.contactFormInput}
             type="text"
             name="number"
-            id={numberId}
+            id="number"
           />
           <BsPhone className={css.contactFormIcon} size="20" />
         </div>
